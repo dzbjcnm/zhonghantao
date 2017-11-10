@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ctgu.dao.UserDao">
+	<!-- 结果map,防止列名不一致，一对一或者一对多的情况 -->
+	<resultMap type="com.ctgu.pojo.User" id="myUser">
+		<!--一对一 -->
+		<!-- <association property=""></association> -->
+		<!-- 一对多 -->
+		<!-- <collection property=""></collection> -->
+		<id property="id" column="id" />
+		<id property="username" column="username" />
+		<id property="name" column="name" />
+		<id property="password" column="password" />
+		<id property="age" column="age" />
+		<id property="gendar" column="gendar" />
+		<id property="phone" column="phone" />
+	</resultMap>
+	<!-- 根据id查询用户信息 -->
+	<select id="findById" parameterType="int" resultType="com.ctgu.pojo.User">
+		select *
+		from friend_user where id = #{id}
+	</select>
+	<!-- 注册，插入所有数据 -->
+	<insert id="save" parameterType="com.ctgu.pojo.User"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into friend_user(username,
+		name, password, age, gendar, phone)
+		values(#{username},#{name},#{password},#{age},#{gendar},#{phone})
+	</insert>
+	<!-- 根据用户名验证用户 -->
+	<select id="findByName" parameterType="String" resultType="com.ctgu.pojo.User">
+		select * from friend_user where username = #{username}
+	</select>
+	<!-- 查询所有信息 -->
+	<select id="findAll" resultMap="myUser">
+		select * from friend_user
+	</select>
+	<!--删除 -->
+	<delete id="doDelete" parameterType="int">
+		delete from friend_user
+		where
+		id = #{id}
+	</delete>
+	<!-- 更新 -->
+	<update id="doUpdate" parameterType="com.ctgu.pojo.User">
+		update friend_user set
+		name=#{name}, password=#{password},gendar=#{gendar},
+		age=#{age},phone=#{phone} where id = #{id}
+	</update>
+	<resultMap type="com.ctgu.pojo.User" id="myUser2">
+		<id property="id" column="id" />
+		<id property="username" column="username" />
+		<id property="name" column="name" />
+		<id property="password" column="password" />
+		<id property="age" column="age" />
+		<id property="gendar" column="gendar" />
+		<id property="phone" column="phone" />
+		<!-- 一对多集和映射 -->
+		<collection property="picList" column="id" ofType="com.ctgu.pojo.Pic"></collection>
+	</resultMap>
+
+</mapper>
